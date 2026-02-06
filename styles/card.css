@@ -1,0 +1,32 @@
+/* Card Component */
+.card {
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 1rem;
+    margin: 1rem auto;
+    max-width: 400px;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card h3 {
+    margin-top: 0;
+    color: var(--text);
+}
+
+.card p {
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+@media (max-width: 480px) {
+    .card {
+        margin: 1rem;
+        max-width: 100%;
+    }
+}

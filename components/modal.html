@@ -1,0 +1,15 @@
+<div class="modal-overlay" id="{{modalId}}" role="dialog" aria-labelledby="{{modalId}}-title" aria-modal="true">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h2 id="{{modalId}}-title">{{title}}</h2>
+            <button class="modal-close" aria-label="Close modal">&times;</button>
+        </div>
+        <div class="modal-content">
+            {{content}}
+        </div>
+        <div class="modal-footer">
+            <button class="modal-btn modal-btn-secondary" data-action="cancel">{{cancelText}}</button>
+            <button class="modal-btn modal-btn-primary" data-action="confirm">{{confirmText}}</button>
+        </div>
+    </div>
+</div>

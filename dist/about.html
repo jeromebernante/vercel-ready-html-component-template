@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>(function(){try{var k='theme-preference',t=localStorage.getItem(k);if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}else if(t==='light'){document.documentElement.setAttribute('data-theme','light');}else{document.documentElement.removeAttribute('data-theme');}}catch(e){} })()</script>
+<meta charset="UTF-8" />
+<title>About</title>
+<link rel="stylesheet" href="/styles/core.css">
+<link rel="stylesheet" href="/styles/card.css">
+<link rel="stylesheet" href="/styles/header.css">
+<link rel="stylesheet" href="/styles/footer.css">
+<link rel="stylesheet" href="/styles/theme-toggle.css">
+</head>
+<body>
+
+
+<header>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1 style="margin: 0;">My Website</h1>
+        <div class="theme-selector">
+  <select id="theme-select" class="theme-dropdown" aria-label="Select theme">
+    <option value="light">☀️ Light</option>
+    <option value="dark">🌙 Dark</option>
+    <option value="system">💻 System</option>
+  </select>
+</div>
+
+    </div>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/components">Components</a>
+    </nav>
+</header>
+
+
+<main>
+<h2>About Us</h2>
+<p>This page reuses the same header and footer.</p>
+</main>
+
+
+<footer>
+    <p>© 2026 My Website</p>
+</footer>
+
+<script defer src="/scripts/theme-toggle.js"></script>
+</body>
+</html>

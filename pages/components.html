@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Components Showcase</title>
+    <link rel="stylesheet" href="../styles/core.css">
+    <link rel="stylesheet" href="../styles/card.css">
+    <link rel="stylesheet" href="../styles/header.css">
+    <link rel="stylesheet" href="../styles/footer.css">
+    <link rel="stylesheet" href="../styles/theme-toggle.css">
+    <link rel="stylesheet" href="../styles/modal.css">
+    <style>
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+        }
+        
+        .component-section {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            background-color: var(--card-bg);
+        }
+        
+        .component-section h2 {
+            margin-top: 0;
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+        }
+        
+        .component-preview {
+            background-color: rgba(0, 0, 0, 0.02);
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+        }
+        
+        .component-code {
+            background-color: rgba(0, 0, 0, 0.05);
+            padding: 1rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        
+        .page-header {
+            background-color: var(--primary);
+            color: var(--primary-contrast);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .page-header h1 {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1>Component Library Showcase</h1>
+        <p>Reusable components and widgets for this project</p>
+    </div>
+
+    <div class="container">
+        <div class="components-grid">
+            <!-- Card Component -->
+            <div class="component-section">
+                <h2>Card</h2>
+                <p>A simple card component with title and description.</p>
+                <div class="component-preview">
+                    <div class="card">
+                        <h3>Example Title</h3>
+                        <p>This is an example card with title and description text.</p>
+                    </div>
+                </div>
+                <div class="component-code">
+&lt;div class="card"&gt;
+    &lt;h3&gt;Title&lt;/h3&gt;
+    &lt;p&gt;Description&lt;/p&gt;
+&lt;/div&gt;
+                </div>
+                <p><strong>File:</strong> components/card.html</p>
+                <p><strong>CSS:</strong> styles/card.css</p>
+            </div>
+
+            <!-- Header Component -->
+            <div class="component-section">
+                <h2>Header</h2>
+                <p>Navigation header with branding and theme toggle.</p>
+                <div class="component-preview">
+                    <header style="margin: -1rem -1rem 0 -1rem; border-radius: 6px 6px 0 0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <h1 style="margin: 0; font-size: 1.5rem;">My Website</h1>
+                            <div class="theme-selector">
+                                <select id="theme-select" class="theme-dropdown" aria-label="Select theme">
+                                    <option value="light">☀️ Light</option>
+                                    <option value="dark">🌙 Dark</option>
+                                    <option value="system">💻 System</option>
+                                </select>
+                            </div>
+                        </div>
+                        <nav>
+                            <a href="/">Home</a>
+                            <a href="/about">About</a>
+                        </nav>
+                    </header>
+                </div>
+                <div class="component-code">
+&lt;header&gt;...&lt;/header&gt;
+                </div>
+                <p><strong>File:</strong> components/header.html</p>
+                <p><strong>CSS:</strong> styles/header.css</p>
+            </div>
+
+            <!-- Footer Component -->
+            <div class="component-section">
+                <h2>Footer</h2>
+                <p>Fixed footer with copyright and site information.</p>
+                <div class="component-preview" style="height: 100px;">
+                    <p style="color: var(--muted); text-align: center; margin: 0; padding: 1rem;">© 2026 My Website</p>
+                </div>
+                <div class="component-code">
+&lt;footer&gt;
+    &lt;p&gt;© 2026 My Website&lt;/p&gt;
+&lt;/footer&gt;
+                </div>
+                <p><strong>File:</strong> components/footer.html</p>
+                <p><strong>CSS:</strong> styles/footer.css</p>
+            </div>
+
+            <!-- Theme Toggle Widget -->
+            <div class="component-section">
+                <h2>Theme Toggle</h2>
+                <p>Theme selector widget for light/dark/system themes.</p>
+                <div class="component-preview">
+                    <div class="theme-selector">
+                        <select id="theme-select2" class="theme-dropdown" aria-label="Select theme">
+                            <option value="light">☀️ Light</option>
+                            <option value="dark">🌙 Dark</option>
+                            <option value="system">💻 System</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="component-code">
+&lt;div class="theme-selector"&gt;
+    &lt;select class="theme-dropdown"&gt;...&lt;/select&gt;
+&lt;/div&gt;
+                </div>
+                <p><strong>File:</strong> widgets/theme-toggle.html</p>
+                <p><strong>CSS:</strong> styles/theme-toggle.css</p>
+            </div>
+
+            <!-- Modal Component -->
+            <div class="component-section">
+                <h2>Modal</h2>
+                <p>Dialog overlay with header, content, and action buttons.</p>
+                <div class="component-preview">
+                    <button class="btn" data-modal-trigger="demo-modal">Open Modal</button>
+                </div>
+                <div class="component-code">
+&lt;div class="modal-overlay"&gt;
+    &lt;div class="modal-box"&gt;...&lt;/div&gt;
+&lt;/div&gt;
+                </div>
+                <p><strong>File:</strong> components/modal.html</p>
+                <p><strong>CSS:</strong> styles/modal.css</p>
+                <p><strong>JS:</strong> scripts/modal.js</p>
+                <button class="btn" data-modal-trigger="demo-modal">View Demo</button>
+            </div>
+
+            <!-- Buttons -->
+            <div class="component-section">
+                <h2>Buttons</h2>
+                <p>Standard button component with styling.</p>
+                <div class="component-preview">
+                    <button class="btn">Primary Button</button>
+                </div>
+                <div class="component-code">
+&lt;button class="btn"&gt;Button&lt;/button&gt;
+                </div>
+                <p><strong>CSS:</strong> styles/core.css (.btn)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo Modal -->
+    <div class="modal-overlay" id="demo-modal" role="dialog" aria-labelledby="demo-modal-title" aria-modal="true">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2 id="demo-modal-title">Example Modal</h2>
+                <button class="modal-close" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="modal-content">
+                <p>This is a demonstration of the modal component. It includes a header, content area, and action buttons at the bottom.</p>
+                <p><strong>Features:</strong></p>
+                <ul style="text-align: left;">
+                    <li>✅ Page scroll is locked when modal is open</li>
+                    <li>✅ Focus is trapped within the modal (Tab wraps at boundaries)</li>
+                    <li>✅ Close button, Cancel, and Confirm buttons work</li>
+                    <li>✅ Press Escape to close</li>
+                    <li>✅ Click background overlay to close</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" data-action="cancel">Cancel</button>
+                <button class="modal-btn modal-btn-primary" data-action="confirm">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <footer style="margin-top: 4rem;">
+        <p>© 2026 My Website</p>
+    </footer>
+
+    <script src="../scripts/theme-toggle.js"></script>
+    <script src="../scripts/modal.js"></script>
+</body>
+</html>
