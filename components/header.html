@@ -1,11 +1,108 @@
+<style>
+    /* Header styling with grid */
+    header {
+        background-color: var(--primary);
+    }
+
+    header .grid-container {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        position: relative;
+        align-items: center;
+    }
+
+    header .logo {
+        padding: 0.5rem 0;
+    }
+
+
+    header .logo img {
+        display: block;
+        height: 3rem;
+        width: auto;
+    }
+
+    /* Hamburger */
+    header .hamburger {
+        font-size: 1.5rem;
+        cursor: pointer;
+        display: block;
+    }
+
+    /* Nav menu */
+    header nav {
+        background-color: var(--primary);
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 100%;
+        grid-template-columns: 1fr;
+    }
+
+    header nav a {
+        display: block;
+        text-decoration: none;
+        color: #fff;
+        border-top: 1px solid #444;
+        padding: 1rem;
+    }
+
+    header nav a:hover {
+        background-color: #444;
+    }
+
+    /* Show menu when active */
+    header nav.active {
+        display: grid;
+    }
+
+    /* Larger screens */
+    @media (min-width: 768px) {
+        header {
+            grid-template-columns: auto 1fr;
+        }
+
+        header .hamburger {
+            display: none;
+        }
+
+        header nav {
+            background-color: unset;
+            display: grid;
+            grid-auto-flow: column;
+            /* horizontal nav links */
+            position: static;
+            width: auto;
+            align-items: center;
+        }
+
+        header nav a {
+            border: none;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+    }
+</style>
+
 <header>
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h1 style="margin: 0;">My Website</h1>
-        {{theme-toggle}}
+    <div class="box-container grid-container">
+        <div class="logo"><img src="../images/code.ico" alt="Logo"></div>
+        <div class="hamburger" id="hamburger">&#9776;</div>
+        <nav id="nav">
+            <a href="/">Home</a>
+            <a href="about">About</a>
+            <a href="components">Components</a>
+            {{theme-toggle}}
+        </nav>
     </div>
-    <nav>
-        <a href="/">Home</a>
-        <a href="/about">About</a>
-        <a href="/components">Components</a>
-    </nav>
 </header>
+
+<script>
+    const hamburger = document.getElementById('hamburger');
+    const nav = document.getElementById('nav');
+
+    hamburger.addEventListener('click', () => {
+        nav.classList.toggle('active');
+    });
+</script>

@@ -1,22 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <script>(function(){try{var k='theme-preference',t=localStorage.getItem(k);if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}else if(t==='light'){document.documentElement.setAttribute('data-theme','light');}else{document.documentElement.removeAttribute('data-theme');}}catch(e){} })()</script>
-<meta charset="UTF-8" />
-<title>Home</title>
-<link rel="stylesheet" href="/styles/core.css">
-<link rel="stylesheet" href="/styles/card.css">
-<link rel="stylesheet" href="/styles/header.css">
-<link rel="stylesheet" href="/styles/footer.css">
-<link rel="stylesheet" href="/styles/theme-toggle.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="/styles/core.css">
+    <link rel="stylesheet" href="/styles/card.css">
+    <link rel="stylesheet" href="/styles/footer.css">
+    <link rel="stylesheet" href="/styles/theme-toggle.css">
 </head>
-<body>
 
+<body>
+    <style>
+    /* Header styling with grid */
+    header {
+        background-color: var(--primary);
+    }
+
+    header .grid-container {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        position: relative;
+        align-items: center;
+    }
+
+    header .logo {
+        padding: 0.5rem 0;
+    }
+
+
+    header .logo img {
+        display: block;
+        height: 3rem;
+        width: auto;
+    }
+
+    /* Hamburger */
+    header .hamburger {
+        font-size: 1.5rem;
+        cursor: pointer;
+        display: block;
+    }
+
+    /* Nav menu */
+    header nav {
+        background-color: var(--primary);
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 100%;
+        grid-template-columns: 1fr;
+    }
+
+    header nav a {
+        display: block;
+        text-decoration: none;
+        color: #fff;
+        border-top: 1px solid #444;
+        padding: 1rem;
+    }
+
+    header nav a:hover {
+        background-color: #444;
+    }
+
+    /* Show menu when active */
+    header nav.active {
+        display: grid;
+    }
+
+    /* Larger screens */
+    @media (min-width: 768px) {
+        header {
+            grid-template-columns: auto 1fr;
+        }
+
+        header .hamburger {
+            display: none;
+        }
+
+        header nav {
+            background-color: unset;
+            display: grid;
+            grid-auto-flow: column;
+            /* horizontal nav links */
+            position: static;
+            width: auto;
+            align-items: center;
+        }
+
+        header nav a {
+            border: none;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+    }
+</style>
 
 <header>
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h1 style="margin: 0;">My Website</h1>
-        <div class="theme-selector">
+    <div class="box-container grid-container">
+        <div class="logo"><img src="../images/code.ico" alt="Logo"></div>
+        <div class="hamburger" id="hamburger">&#9776;</div>
+        <nav id="nav">
+            <a href="/">Home</a>
+            <a href="about">About</a>
+            <a href="components">Components</a>
+            <div class="theme-selector">
   <select id="theme-select" class="theme-dropdown" aria-label="Select theme">
     <option value="light">☀️ Light</option>
     <option value="dark">🌙 Dark</option>
@@ -24,36 +116,61 @@
   </select>
 </div>
 
+        </nav>
     </div>
-    <nav>
-        <a href="/">Home</a>
-        <a href="/about">About</a>
-        <a href="/components">Components</a>
-    </nav>
 </header>
 
+<script>
+    const hamburger = document.getElementById('hamburger');
+    const nav = document.getElementById('nav');
 
-<main>
-<h2>Welcome</h2>
-<div class="card" ⚡>
+    hamburger.addEventListener('click', () => {
+        nav.classList.toggle('active');
+    });
+</script>
+    <main>
+        <style>
+    .section-media-header {
+        background-color: var(--primary);
+        background-image: url(../images/header-bg-1.png);
+        background-size: cover;
+        background-position: center;
+        color: var(--primary-contrast);
+        padding: 2rem 0;
+    }
+    
+    .section-media-header h1 {
+        margin: 0;
+    }
+</style>
+
+<section class="section-media-header">
+    <div class="box-container">
+        <h1>Vercel Ready HTML Component Template</h1>
+        <p>Customizable HTML and UI components.</p>
+    </div>
+</section>
+        <section>
+            <div class="box-container">
+                <div class="card" ⚡>
     <h3>Feature One</h3>
     <p>Build dynamic components with parameters</p>
 </div>
-<div class="card" 🎨>
+                <div class="card" 🎨>
     <h3>Feature Two</h3>
     <p>Flexible and easy to maintain</p>
 </div>
-<div class="card" 🔧>
+                <div class="card" 🔧>
     <h3>Feature Three</h3>
     <p>Reusable across all pages</p>
 </div>
-</main>
-
-
-<footer>
+            </div>
+        </section>
+    </main>
+    <footer>
     <p>© 2026 My Website</p>
 </footer>
-
-<script defer src="/scripts/theme-toggle.js"></script>
+    <script defer src="/scripts/theme-toggle.js"></script>
 </body>
+
 </html>

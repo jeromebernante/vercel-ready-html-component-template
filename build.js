@@ -7,6 +7,7 @@ const DIRS = {
   dist: "./dist",
   styles: "./styles",
   scripts: "./scripts",
+  images: "./images",
   widgets: "./widgets",
 };
 
@@ -129,6 +130,7 @@ function build() {
   cleanDist();
   copyDirectory(DIRS.styles, path.join(DIRS.dist, "styles"));
   copyDirectory(DIRS.scripts, path.join(DIRS.dist, "scripts"));
+  copyDirectory(DIRS.images, path.join(DIRS.dist, "images"));
 
   const components = loadComponents([DIRS.components, DIRS.widgets]);
 

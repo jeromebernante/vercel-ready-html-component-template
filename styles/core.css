@@ -67,6 +67,10 @@
     --shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+.border-red {
+    border: 1px dashed red;
+}
+
 /* Smooth transitions for theme changes */
 * { box-sizing: border-box; }
 html, body { height: 100%; }
@@ -80,19 +84,23 @@ body {
 }
 
 /* Layout helpers */
-.container {
+
+section {
+    padding: 4rem 0;
+}
+
+.box-container {
     max-width: var(--max-width);
     margin: 0 auto;
     padding: 0 1rem;
 }
 
-
-
-main {
-    padding: 2rem;
-    text-align: center;
-    min-height: calc(100vh - 160px);
+.full-container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 1rem;
 }
+
 
 /* Utilities */
 .text-muted { color: var(--muted); }
