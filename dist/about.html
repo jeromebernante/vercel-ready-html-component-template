@@ -14,9 +14,20 @@
 
 <body>
     <style>
-    /* Header styling with grid */
+    /* ================= HEADER ================= */
+
     header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
         background-color: var(--primary);
+        transition: transform 0.25s ease;
+        will-change: transform;
+    }
+
+    /* hidden state */
+    header.is-hidden {
+        transform: translateY(-100%);
     }
 
     header .grid-container {
@@ -29,7 +40,6 @@
     header .logo {
         padding: 0.5rem 0;
     }
-
 
     header .logo img {
         display: block;
@@ -44,7 +54,7 @@
         display: block;
     }
 
-    /* Nav menu */
+    /* Nav */
     header nav {
         background-color: var(--primary);
         display: none;
@@ -71,6 +81,7 @@
     header nav.active {
         display: grid;
     }
+
 
     /* Larger screens */
     @media (min-width: 768px) {
@@ -100,6 +111,7 @@
     }
 </style>
 
+
 <header>
     <div class="box-container grid-container">
         <div class="logo"><img src="../images/code.ico" alt="Logo"></div>
@@ -121,12 +133,53 @@
 </header>
 
 <script>
+    // Mobile menu toggle
     const hamburger = document.getElementById('hamburger');
     const nav = document.getElementById('nav');
 
     hamburger.addEventListener('click', () => {
         nav.classList.toggle('active');
     });
+
+    // Sticky hide-on-scroll logic
+    const header = document.querySelector('header');
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    function handleScroll() {
+        const currentScrollY = window.scrollY;
+
+        // Ignore tiny scroll noise
+        if (Math.abs(currentScrollY - lastScrollY) < 5) {
+            ticking = false;
+            return;
+        }
+
+        if (
+            currentScrollY > lastScrollY &&
+            currentScrollY > header.offsetHeight
+        ) {
+            // scrolling down
+            header.classList.add('is-hidden');
+        } else {
+            // scrolling up
+            header.classList.remove('is-hidden');
+        }
+
+        lastScrollY = currentScrollY;
+        ticking = false;
+    }
+
+    window.addEventListener(
+        'scroll',
+        () => {
+            if (!ticking) {
+                requestAnimationFrame(handleScroll);
+                ticking = true;
+            }
+        },
+        { passive: true }
+    );
 </script>
     <main>
         <style>
