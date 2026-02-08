@@ -15,31 +15,35 @@ A lightweight, reusable component library built with vanilla HTML, CSS, and Java
 
 ```
 componenthub/
-├── components/          # Reusable component templates (HTML)
-│   ├── card.html       # Card component with title & description
-│   ├── header.html     # Responsive header with navigation
-│   ├── footer.html     # Site footer
-│   └── modal.html      # Modal dialog with focus trap & scroll lock
-├── widgets/            # Standalone widgets (HTML)
-│   └── theme-toggle.html    # Light/dark/system theme switcher
-├── pages/              # Page templates (auto-built into HTML)
-│   ├── index.html      # Home page
-│   ├── about.html      # About page
-│   └── components.html # Component showcase & demo page
-├── styles/             # Modular CSS stylesheets
-│   ├── core.css        # Global styles, theme variables, utilities
-│   ├── card.css        # Card component styles
-│   ├── header.css      # Header component styles
-│   ├── footer.css      # Footer component styles
-│   ├── theme-toggle.css    # Theme selector styles
-│   └── modal.css       # Modal component styles
-├── scripts/            # JavaScript utilities & functionality
-│   ├── theme-toggle.js # Theme switching logic
-│   └── modal.js        # Modal open/close, focus trap, scroll lock
-├── dist/               # (Auto-generated) Production-ready output
-├── build.js            # Build script—replaces component placeholders
-├── package.json        # Project dependencies & metadata
-├── vercel.json         # Vercel deployment configuration
+├── development/        # Source files (edit here)
+│   ├── components/     # Reusable component templates (HTML)
+│   │   ├── card.html
+│   │   ├── footer.html
+│   │   ├── header-hide-on-scroll-neurox.html
+│   │   ├── modal.html
+│   │   ├── section-media-header.html
+│   │   └── section-no-content.html
+│   ├── widgets/        # Standalone widgets (HTML)
+│   │   └── theme-toggle.html
+│   ├── pages/          # Page templates (auto-built into HTML)
+│   │   ├── index.html
+│   │   ├── about.html
+│   │   └── components.html
+│   ├── styles/         # Modular CSS stylesheets
+│   │   ├── core.css
+│   │   ├── card.css
+│   │   ├── footer.css
+│   │   ├── modal.css
+│   │   └── theme-toggle.css
+│   ├── scripts/        # JavaScript utilities
+│   │   ├── theme-toggle.js
+│   │   └── modal.js
+│   ├── images/         # Static assets
+│   └── build/          # (Auto-generated) Dev build output (npm run build:dev)
+├── production/         # (Auto-generated) Production output for deployment
+├── build.js            # Build script—reads from development/, outputs to production/ or development/build/
+├── package.json        # Project dependencies & scripts
+├── vercel.json         # Vercel deployment (output: production)
 └── README.md           # This file
 ```
 
@@ -68,16 +72,28 @@ Becomes:
 ### Prerequisites
 - Node.js 14+ installed
 
-### Development
+### Production build (for deployment or local preview)
 
-1. **Build the project** - Generates `/dist` from components, styles, and scripts:
+1. **Build** - Reads from `development/`, outputs to `production/`:
    ```bash
-   node build.js
+   npm run build
    ```
 
-2. **Start development server** - Serves built files locally:
+2. **Serve** - Preview the production build locally:
    ```bash
-   npx serve dist
+   npx serve production
+   ```
+
+### Development build (local dev)
+
+1. **Build for dev** - Outputs to `development/build/`:
+   ```bash
+   npm run build:dev
+   ```
+
+2. **Serve** - Preview the dev build:
+   ```bash
+   npx serve development/build
    ```
 
 3. **Open in browser**:
@@ -87,7 +103,7 @@ Becomes:
 
 ### Viewing Components
 
-After running the above commands, visit:
+After building and serving, visit:
 - **Home page**: http://localhost:3000
 - **Components showcase**: http://localhost:3000/components.html
 - **About page**: http://localhost:3000/about.html
@@ -96,11 +112,13 @@ After running the above commands, visit:
 
 | Component | File | Features |
 |-----------|------|----------|
-| **Card** | `components/card.html` | Simple content card with title & description |
-| **Header** | `components/header.html` | Navigation header with theme toggle |
-| **Footer** | `components/footer.html` | Fixed footer with copyright |
-| **Modal** | `components/modal.html` | Dialog with scroll lock, focus trap, keyboard support |
-| **Theme Toggle** | `widgets/theme-toggle.html` | Light/Dark/System theme selector |
+| **Card** | `development/components/card.html` | Simple content card with title & description |
+| **Header** | `development/components/header-hide-on-scroll-neurox.html` | Header with hide-on-scroll behavior |
+| **Footer** | `development/components/footer.html` | Site footer |
+| **Modal** | `development/components/modal.html` | Dialog with scroll lock, focus trap, keyboard support |
+| **Section (media header)** | `development/components/section-media-header.html` | Media header section |
+| **Section (no content)** | `development/components/section-no-content.html` | Placeholder section |
+| **Theme Toggle** | `development/widgets/theme-toggle.html` | Light/Dark/System theme selector |
 
 ## 🎨 Theme System
 
@@ -131,8 +149,8 @@ Supports: `light`, `dark`, or OS preference (default).
 
 1. Push to GitHub
 2. Connect repo to Vercel
-3. Configure build command: `node build.js`
-4. Configure output directory: `dist`
+3. Build command: `npm run build` (or `node build.js`)
+4. Output directory: `production`
 5. Deploy!
 
 Or use Vercel CLI:
@@ -141,8 +159,18 @@ npm install -g vercel
 vercel
 ```
 
+The project’s `vercel.json` already sets `outputDirectory` to `production`.
+
+### Build scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run build` | Build from `development/` → `production/` (for deploy) |
+| `npm run build:dev` | Build from `development/` → `development/build/` (local dev) |
+
 ## 🎓 Best Practices
 
+- ✅ Edit source files only in `development/` (components, pages, styles, scripts, images, widgets)
 - ✅ Keep components modular and focused
 - ✅ Use consistent naming (kebab-case for files/IDs, camelCase for JS)
 - ✅ Document component parameters in the showcase page
