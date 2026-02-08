@@ -16,7 +16,7 @@
     <style>
     /* ================= HEADER ================= */
 
-    header {
+    .header-hide-on-scroll-neurox {
         position: sticky;
         top: 0;
         z-index: 1000;
@@ -26,36 +26,36 @@
     }
 
     /* hidden state */
-    header.is-hidden {
+    .header-hide-on-scroll-neurox.is-hidden {
         transform: translateY(-100%);
     }
 
-    header .grid-container {
+    .header-hide-on-scroll-neurox .grid-container {
         display: grid;
         grid-template-columns: 1fr auto;
         position: relative;
         align-items: center;
     }
 
-    header .logo {
+    .header-hide-on-scroll-neurox .logo {
         padding: 0.5rem 0;
     }
 
-    header .logo img {
+    .header-hide-on-scroll-neurox .logo img {
         display: block;
         height: 3rem;
         width: auto;
     }
 
     /* Hamburger */
-    header .hamburger {
+    .header-hide-on-scroll-neurox .hamburger {
         font-size: 1.5rem;
         cursor: pointer;
         display: block;
     }
 
     /* Nav */
-    header nav {
+    .header-hide-on-scroll-neurox nav {
         background-color: var(--primary);
         display: none;
         position: absolute;
@@ -65,7 +65,7 @@
         grid-template-columns: 1fr;
     }
 
-    header nav a {
+    .header-hide-on-scroll-neurox nav a {
         display: block;
         text-decoration: none;
         color: #fff;
@@ -73,27 +73,27 @@
         padding: 1rem;
     }
 
-    header nav a:hover {
+    .header-hide-on-scroll-neurox nav a:hover {
         background-color: #444;
     }
 
     /* Show menu when active */
-    header nav.active {
+    .header-hide-on-scroll-neurox nav.active {
         display: grid;
     }
 
 
     /* Larger screens */
     @media (min-width: 768px) {
-        header {
+        .header-hide-on-scroll-neurox {
             grid-template-columns: auto 1fr;
         }
 
-        header .hamburger {
+        .header-hide-on-scroll-neurox .hamburger {
             display: none;
         }
 
-        header nav {
+        .header-hide-on-scroll-neurox nav {
             background-color: unset;
             display: grid;
             grid-auto-flow: column;
@@ -103,7 +103,7 @@
             align-items: center;
         }
 
-        header nav a {
+        .header-hide-on-scroll-neurox nav a {
             border: none;
             padding-top: 0;
             padding-bottom: 0;
@@ -112,11 +112,11 @@
 </style>
 
 
-<header>
+<header class="header-hide-on-scroll-neurox">
     <div class="box-container grid-container">
         <div class="logo"><img src="../images/code.ico" alt="Logo"></div>
-        <div class="hamburger" id="hamburger">&#9776;</div>
-        <nav id="nav">
+        <div class="hamburger">&#9776;</div>
+        <nav class="nav">
             <a href="/">Home</a>
             <a href="about">About</a>
             <a href="components">Components</a>
@@ -134,15 +134,15 @@
 
 <script>
     // Mobile menu toggle
-    const hamburger = document.getElementById('hamburger');
-    const nav = document.getElementById('nav');
+    const hamburger = document.querySelector('.header-hide-on-scroll-neurox .hamburger');
+    const nav = document.querySelector('.header-hide-on-scroll-neurox .nav');
 
     hamburger.addEventListener('click', () => {
         nav.classList.toggle('active');
     });
 
     // Sticky hide-on-scroll logic
-    const header = document.querySelector('header');
+    const header = document.querySelector('.header-hide-on-scroll-neurox');
     let lastScrollY = window.scrollY;
     let ticking = false;
 
