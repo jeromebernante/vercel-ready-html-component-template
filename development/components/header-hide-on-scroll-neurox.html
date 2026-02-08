@@ -1,0 +1,161 @@
+<style>
+    /* ================= HEADER ================= */
+
+    .header-hide-on-scroll-neurox {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background-color: var(--primary);
+        transition: transform 0.25s ease;
+        will-change: transform;
+    }
+
+    /* hidden state */
+    .header-hide-on-scroll-neurox.is-hidden {
+        transform: translateY(-100%);
+    }
+
+    .header-hide-on-scroll-neurox .grid-container {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        position: relative;
+        align-items: center;
+    }
+
+    .header-hide-on-scroll-neurox .logo {
+        padding: 0.5rem 0;
+    }
+
+    .header-hide-on-scroll-neurox .logo img {
+        display: block;
+        height: 3rem;
+        width: auto;
+    }
+
+    /* Hamburger */
+    .header-hide-on-scroll-neurox .hamburger {
+        font-size: 1.5rem;
+        cursor: pointer;
+        display: block;
+    }
+
+    /* Nav */
+    .header-hide-on-scroll-neurox nav {
+        background-color: var(--primary);
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 100%;
+        grid-template-columns: 1fr;
+    }
+
+    .header-hide-on-scroll-neurox nav a {
+        display: block;
+        text-decoration: none;
+        color: #fff;
+        border-top: 1px solid #444;
+        padding: 1rem;
+    }
+
+    .header-hide-on-scroll-neurox nav a:hover {
+        background-color: #444;
+    }
+
+    /* Show menu when active */
+    .header-hide-on-scroll-neurox nav.active {
+        display: grid;
+    }
+
+
+    /* Larger screens */
+    @media (min-width: 768px) {
+        .header-hide-on-scroll-neurox {
+            grid-template-columns: auto 1fr;
+        }
+
+        .header-hide-on-scroll-neurox .hamburger {
+            display: none;
+        }
+
+        .header-hide-on-scroll-neurox nav {
+            background-color: unset;
+            display: grid;
+            grid-auto-flow: column;
+            /* horizontal nav links */
+            position: static;
+            width: auto;
+            align-items: center;
+        }
+
+        .header-hide-on-scroll-neurox nav a {
+            border: none;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+    }
+</style>
+
+
+<header class="header-hide-on-scroll-neurox">
+    <div class="box-container grid-container">
+        <div class="logo"><img src="../images/code.ico" alt="Logo"></div>
+        <div class="hamburger">&#9776;</div>
+        <nav class="nav">
+            <a href="/">Home</a>
+            <a href="about">About</a>
+            <a href="components">Components</a>
+            {{theme-toggle}}
+        </nav>
+    </div>
+</header>
+
+<script>
+    // Mobile menu toggle
+    const hamburger = document.querySelector('.header-hide-on-scroll-neurox .hamburger');
+    const nav = document.querySelector('.header-hide-on-scroll-neurox .nav');
+
+    hamburger.addEventListener('click', () => {
+        nav.classList.toggle('active');
+    });
+
+    // Sticky hide-on-scroll logic
+    const header = document.querySelector('.header-hide-on-scroll-neurox');
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    function handleScroll() {
+        const currentScrollY = window.scrollY;
+
+        // Ignore tiny scroll noise
+        if (Math.abs(currentScrollY - lastScrollY) < 5) {
+            ticking = false;
+            return;
+        }
+
+        if (
+            currentScrollY > lastScrollY &&
+            currentScrollY > header.offsetHeight
+        ) {
+            // scrolling down
+            header.classList.add('is-hidden');
+        } else {
+            // scrolling up
+            header.classList.remove('is-hidden');
+        }
+
+        lastScrollY = currentScrollY;
+        ticking = false;
+    }
+
+    window.addEventListener(
+        'scroll',
+        () => {
+            if (!ticking) {
+                requestAnimationFrame(handleScroll);
+                ticking = true;
+            }
+        },
+        { passive: true }
+    );
+</script>

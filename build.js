@@ -1,29 +1,36 @@
 import fs from "fs";
 import path from "path";
 
+// Source folders live under development/
+const DEV_SRC = "./development";
 const DIRS = {
-  components: "./components",
-  pages: "./pages",
-  dist: "./dist",
-  styles: "./styles",
-  scripts: "./scripts",
-  widgets: "./widgets",
+  components: path.join(DEV_SRC, "components"),
+  pages: path.join(DEV_SRC, "pages"),
+  styles: path.join(DEV_SRC, "styles"),
+  scripts: path.join(DEV_SRC, "scripts"),
+  images: path.join(DEV_SRC, "images"),
+  widgets: path.join(DEV_SRC, "widgets"),
 };
+
+// Output: production/ for deploy, development/build/ for dev
+const target = process.argv[2] === "development" ? "development" : "production";
+const outDir = target === "production"
+  ? "./production"
+  : path.join(DEV_SRC, "build");
 
 const THEME_SCRIPT = `<script>(function(){try{var k='theme-preference',t=localStorage.getItem(k);if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}else if(t==='light'){document.documentElement.setAttribute('data-theme','light');}else{document.documentElement.removeAttribute('data-theme');}}catch(e){} })()</script>`;
 
 /**
- * Remove all files and directories from dist
+ * Remove all files and directories from output directory
  */
-function cleanDist() {
-  const distPath = DIRS.dist;
-  if (!fs.existsSync(distPath)) {
-    fs.mkdirSync(distPath);
+function cleanOutDir() {
+  if (!fs.existsSync(outDir)) {
+    fs.mkdirSync(outDir, { recursive: true });
     return;
   }
 
-  for (const file of fs.readdirSync(distPath)) {
-    const fullPath = path.join(distPath, file);
+  for (const file of fs.readdirSync(outDir)) {
+    const fullPath = path.join(outDir, file);
     const stat = fs.statSync(fullPath);
     if (stat.isDirectory()) {
       fs.rmSync(fullPath, { recursive: true, force: true });
@@ -126,9 +133,10 @@ function injectThemeScript(html) {
 
 // Main build process
 function build() {
-  cleanDist();
-  copyDirectory(DIRS.styles, path.join(DIRS.dist, "styles"));
-  copyDirectory(DIRS.scripts, path.join(DIRS.dist, "scripts"));
+  cleanOutDir();
+  copyDirectory(DIRS.styles, path.join(outDir, "styles"));
+  copyDirectory(DIRS.scripts, path.join(outDir, "scripts"));
+  copyDirectory(DIRS.images, path.join(outDir, "images"));
 
   const components = loadComponents([DIRS.components, DIRS.widgets]);
 
@@ -138,14 +146,14 @@ function build() {
     html = injectThemeScript(html);
 
     const name = path.basename(file, ".html");
-    const outputPath = name === "index" 
-      ? path.join(DIRS.dist, file)
-      : path.join(DIRS.dist, `${name}.html`);
-    
+    const outputPath = name === "index"
+      ? path.join(outDir, file)
+      : path.join(outDir, `${name}.html`);
+
     fs.writeFileSync(outputPath, html);
   }
 
-  console.log("Build complete");
+  console.log(`Build complete → ${target}`);
 }
 
 build();

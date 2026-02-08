@@ -2,6 +2,7 @@
   "name": "html-components-build",
   "type": "module",
   "scripts": {
-    "build": "node build.js"
+    "build": "node build.js",
+    "build:dev": "node build.js development"
   }
 }
