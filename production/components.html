@@ -120,7 +120,45 @@
             <a href="/">Home</a>
             <a href="about">About</a>
             <a href="components">Components</a>
-            <div class="theme-selector">
+            <style>
+  /* Theme Toggle Widget */
+  .theme-selector-neurox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .theme-selector-neurox .theme-dropdown {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: var(--card-bg);
+    color: var(--text);
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 200ms ease;
+  }
+
+  .theme-selector-neurox .theme-dropdown:hover {
+    border-color: var(--primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .theme-selector-neurox .theme-dropdown:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+  }
+
+  @media (max-width: 480px) {
+    .theme-selector-neurox .theme-dropdown {
+      padding: 0.4rem 0.6rem;
+      font-size: 0.85rem;
+    }
+  }
+</style>
+
+<div class="theme-selector-neurox">
   <select id="theme-select" class="theme-dropdown" aria-label="Select theme">
     <option value="light">☀️ Light</option>
     <option value="dark">🌙 Dark</option>
@@ -128,6 +166,60 @@
   </select>
 </div>
 
+<script>
+  // Theme toggle logic
+  function initThemeToggle() {
+    const root = document.documentElement;
+    const select = document.getElementById('theme-select');
+    const storageKey = 'theme-preference';
+
+    // Determine initial theme
+    const getTheme = () => {
+      const stored = localStorage.getItem(storageKey);
+      if (stored && ['light', 'dark', 'system'].includes(stored)) {
+        return stored;
+      }
+      return 'system';
+    };
+
+    const setTheme = (theme) => {
+      if (theme === 'system') {
+        root.removeAttribute('data-theme');
+      } else {
+        root.setAttribute('data-theme', theme);
+      }
+      localStorage.setItem(storageKey, theme);
+      if (select) {
+        select.value = theme;
+      }
+    };
+
+    // Initialize with stored or default theme
+    const currentTheme = getTheme();
+    setTheme(currentTheme);
+
+    // Listen for dropdown changes
+    select.addEventListener('change', (e) => {
+        const newTheme = e.target.value;
+        setTheme(newTheme);
+      });
+
+    // Listen for OS theme changes (only matters if system is selected)
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      const current = localStorage.getItem(storageKey);
+    });
+
+  }
+
+  // Run when DOM is ready
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initThemeToggle();
+  });
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    initThemeToggle();
+  }
+</script>
         </nav>
     </div>
 </header>
@@ -204,20 +296,47 @@
     </div>
 </section>
         <style>
-    .section-no-content .box-container {
+    .section-no-content-neurox .box-container {
         display: flex;
         align-items: center;
         justify-content: center;
     }
 </style>
 
-<section class="section-no-content">
+<section class="section-no-content-neurox">
     <div class="box-container" style="height: 500px;">
         <h2>No content yet</h2>
     </div>
 </section>
     </main>
-    <footer>
+    <style>
+    /* Footer Component */
+    footer {
+        background-color: var(--card-bg);
+        color: var(--muted);
+        text-align: center;
+        padding: 1rem;
+        width: 100%;
+        border-top: 1px solid rgba(0, 0, 0, 0.06);
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    footer p {
+        margin: 0.5rem 0;
+        font-size: 0.95rem;
+    }
+
+    @media (max-width: 480px) {
+        footer {
+            padding: 0.75rem;
+        }
+
+        footer p {
+            font-size: 0.85rem;
+        }
+    }
+</style>
+<footer>
     <p>© 2026 My Website</p>
 </footer>
     <script src="../scripts/theme-toggle.js"></script>
