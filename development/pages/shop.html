@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop</title>
+    <link rel="stylesheet" href="/styles/core.css">
+    <link rel="stylesheet" href="/styles/product-card.css">
+</head>
+<body>
+    {{header-hide-on-scroll-neurox:menu-shop-class=active}}
+    <main>
+        {{section-media-header:title=Component Library Showcase|description=Reusable components and widgets for this project}}
+        <div class="products-grid">
+            <div class="loading-indicator" style="text-align: center; padding: 2rem;">
+                <p>Loading products...</p>
+            </div>
+        </div>
+    </main>
+    {{footer}}
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            loadProducts();
+        });
+
+        function loadProducts() {
+            const grid = document.querySelector('.products-grid');
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", "https://dummyjson.com/products?limit=12", true);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    try {
+                        const data = JSON.parse(xhr.responseText);
+
+                        if (data.products && data.products.length > 0) {
+                            const productsHtml = data.products.map(product => `{{product-card}}`).join('');
+
+                            grid.innerHTML = productsHtml;
+                        } else {
+                            grid.innerHTML = '<div class="error">No products found</div>';
+                        }
+                    } catch (error) {
+                        console.error('Error parsing products:', error);
+                        grid.innerHTML = '<div class="error">Invalid server response</div>';
+                    }
+                } else {
+                    grid.innerHTML = '<div class="error">Error loading products: HTTP ' + xhr.status + '</div>';
+                }
+            };
+
+            xhr.onerror = function () {
+                grid.innerHTML = '<div class="error">Network error while loading products</div>';
+            };
+            xhr.send();
+        }
+    </script>
+    <script src="/scripts/helper.js"></script>
+</body>
+</html>

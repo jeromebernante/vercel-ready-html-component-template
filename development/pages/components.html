@@ -6,69 +6,14 @@
     <title>Components Showcase</title>
     <link rel="stylesheet" href="/styles/core.css">
     <link rel="stylesheet" href="/styles/product-card.css">
-    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
 </head>
 <body>
-    {{header-hide-on-scroll-neurox}}
+    {{header-hide-on-scroll-neurox:menu-components-class=active}}
     <main>
         {{section-media-header:title=Component Library Showcase|description=Reusable components and widgets for this project}}
-        <div class="products-grid" 
-             hx-get="https://dummyjson.com/products?limit=12" 
-             hx-trigger="load" 
-             hx-swap="none"
-             hx-on::after-request="handleProductsResponse(event)">
-            <div class="loading-indicator" style="text-align: center; padding: 2rem;">
-                <p>Loading products...</p>
-            </div>
-        </div>
+        {{section-no-content}}
     </main>
     {{footer}}
-    <script>
-        function handleProductsResponse(event) {
-            const grid = document.querySelector('.products-grid');
-            
-            if (event.detail.xhr.status === 200) {
-                try {
-                    const data = JSON.parse(event.detail.xhr.responseText);
-                    
-                    if (data.products && data.products.length > 0) {
-                        const productsHtml = data.products.map(product => `
-                            
-                            <div class="product-card">
-                                <div class="product-card__image">
-                                    <img src="${escapeHtml(product.thumbnail)}" alt="${escapeHtml(product.title)}" loading="lazy">
-                                </div>
-                                <div class="product-card__content">
-                                    <h3 class="product-card__title">${escapeHtml(product.title)}</h3>
-                                    <p class="product-card__description">${escapeHtml(product.description)}</p>
-                                    <div class="product-card__meta">
-                                        <span class="product-card__price">$${escapeHtml(product.price)}</span>
-                                        <span class="product-card__rating">
-                                            <span class="product-card__stars">${escapeHtml(product.rating)} ⭐</span>
-                                            <span class="product-card__stock">${escapeHtml(product.stock)} in stock</span>
-                                        </span>
-                                    </div>
-                                    <div class="product-card__brand">
-                                        <span class="product-card__brand-label">Brand:</span>
-                                        <span class="product-card__brand-name">${escapeHtml(product.brand || 'N/A')}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        `).join('');
-                        
-                        grid.innerHTML = productsHtml;
-                    } else {
-                        grid.innerHTML = '<div class="error">No products found</div>';
-                    }
-                } catch (error) {
-                    console.error('Error parsing products:', error);
-                    grid.innerHTML = '<div class="error">Error loading products: Invalid response</div>';
-                }
-            } else {
-                grid.innerHTML = '<div class="error">Error loading products: HTTP ' + event.detail.xhr.status + '</div>';
-            }
-        }
-    </script>
-    <script src="/scripts/helper.js"></script>
+
 </body>
 </html>

@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <script>(function(){try{var k='theme-preference',t=localStorage.getItem(k);if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}else if(t==='light'){document.documentElement.setAttribute('data-theme','light');}else{document.documentElement.removeAttribute('data-theme');}}catch(e){} })()</script>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTMX</title>
-    <link rel="stylesheet" href="styles/core.css">
-    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js" integrity="sha384-/TgkGk7p307TH7EXJDuUlgG3Ce1UVolAOFopFekQkkXihi5u/6OCvVKyz1W+idaz" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Shop</title>
+    <link rel="stylesheet" href="/styles/core.css">
+    <link rel="stylesheet" href="/styles/product-card.css">
 </head>
-
 <body>
     <style>
     /* ================= HEADER ================= */
@@ -72,10 +69,6 @@
         padding: 1rem;
     }
 
-    .header-hide-on-scroll-neurox nav a:hover {
-        background-color: #444;
-    }
-
     /* Show menu when active */
     .header-hide-on-scroll-neurox nav.active {
         display: grid;
@@ -107,6 +100,10 @@
             padding-top: 0;
             padding-bottom: 0;
         }
+
+        .header-hide-on-scroll-neurox nav a.active {
+            font-weight: bold;
+        }
     }
 </style>
 
@@ -116,10 +113,10 @@
         <div class="logo"><img src="../images/code.ico" alt="Logo"></div>
         <div class="hamburger">&#9776;</div>
         <nav class="nav">
-            <a href="/">Home</a>
-            <a href="about">About</a>
-            <a href="components">Components</a>
-            <a href="htmx">HTMX</a>
+            <a class="{{menu-home-class}}" href="/">Home</a>
+            <a class="{{menu-about-class}}" href="about">About</a>
+            <a class="{{menu-components-class}}" href="components">Components</a>
+            <a class="active" href="shop">Shop</a>
             <style>
   /* Theme Toggle Widget */
   .theme-selector-neurox {
@@ -291,15 +288,15 @@
 
 <section class="section-media-header">
     <div class="box-container">
-        <h1>Vercel Ready HTML Component Template</h1>
-        <p>Customizable HTML and UI components.</p>
+        <h1>Component Library Showcase</h1>
+        <p>Reusable components and widgets for this project</p>
     </div>
 </section>
-        <section>
-            <div class="box-container">
-                
+        <div class="products-grid">
+            <div class="loading-indicator" style="text-align: center; padding: 2rem;">
+                <p>Loading products...</p>
             </div>
-        </section>
+        </div>
     </main>
     <style>
     /* Footer Component */
@@ -331,6 +328,64 @@
 <footer>
     <p>© 2026 My Website</p>
 </footer>
-</body>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            loadProducts();
+        });
+
+        function loadProducts() {
+            const grid = document.querySelector('.products-grid');
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", "https://dummyjson.com/products?limit=12", true);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    try {
+                        const data = JSON.parse(xhr.responseText);
+
+                        if (data.products && data.products.length > 0) {
+                            const productsHtml = data.products.map(product => `<!-- has product-card.css-->
+<div class="product-card">
+    <div class="product-card__image">
+        <img src="${escapeHtml(product.thumbnail)}" alt="${escapeHtml(product.title)}" loading="lazy">
+    </div>
+    <div class="product-card__content">
+        <h3 class="product-card__title">${escapeHtml(product.title)}</h3>
+        <p class="product-card__description">${escapeHtml(product.description)}</p>
+        <div class="product-card__meta">
+            <span class="product-card__price">$${escapeHtml(product.price)}</span>
+            <span class="product-card__rating">
+                <span class="product-card__stars">${escapeHtml(product.rating)} ⭐</span>
+                <span class="product-card__stock">${escapeHtml(product.stock)} in stock</span>
+            </span>
+        </div>
+        <div class="product-card__brand">
+            <span class="product-card__brand-label">Brand:</span>
+            <span class="product-card__brand-name">${escapeHtml(product.brand)}</span>
+        </div>
+    </div>
+</div>
+<!-- escapeHtml() from helper.js -->`).join('');
+
+                            grid.innerHTML = productsHtml;
+                        } else {
+                            grid.innerHTML = '<div class="error">No products found</div>';
+                        }
+                    } catch (error) {
+                        console.error('Error parsing products:', error);
+                        grid.innerHTML = '<div class="error">Invalid server response</div>';
+                    }
+                } else {
+                    grid.innerHTML = '<div class="error">Error loading products: HTTP ' + xhr.status + '</div>';
+                }
+            };
+
+            xhr.onerror = function () {
+                grid.innerHTML = '<div class="error">Network error while loading products</div>';
+            };
+            xhr.send();
+        }
+    </script>
+    <script src="/scripts/helper.js"></script>
+</body>
 </html>

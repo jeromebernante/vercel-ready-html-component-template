@@ -71,10 +71,6 @@
         padding: 1rem;
     }
 
-    .header-hide-on-scroll-neurox nav a:hover {
-        background-color: #444;
-    }
-
     /* Show menu when active */
     .header-hide-on-scroll-neurox nav.active {
         display: grid;
@@ -106,6 +102,10 @@
             padding-top: 0;
             padding-bottom: 0;
         }
+
+        .header-hide-on-scroll-neurox nav a.active {
+            font-weight: bold;
+        }
     }
 </style>
 
@@ -115,10 +115,10 @@
         <div class="logo"><img src="../images/code.ico" alt="Logo"></div>
         <div class="hamburger">&#9776;</div>
         <nav class="nav">
-            <a href="/">Home</a>
-            <a href="about">About</a>
-            <a href="components">Components</a>
-            <a href="htmx">HTMX</a>
+            <a class="active" href="/">Home</a>
+            <a class="{{menu-about-class}}" href="about">About</a>
+            <a class="{{menu-components-class}}" href="components">Components</a>
+            <a class="{{menu-shop-class}}" href="shop">Shop</a>
             <style>
   /* Theme Toggle Widget */
   .theme-selector-neurox {

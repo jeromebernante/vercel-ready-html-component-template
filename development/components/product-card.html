@@ -1,20 +1,22 @@
+<!-- has product-card.css-->
 <div class="product-card">
     <div class="product-card__image">
-        <img src="{{thumbnail}}" alt="{{title}}" loading="lazy">
+        <img src="${escapeHtml(product.thumbnail)}" alt="${escapeHtml(product.title)}" loading="lazy">
     </div>
     <div class="product-card__content">
-        <h3 class="product-card__title">{{title}}</h3>
-        <p class="product-card__description">{{description}}</p>
+        <h3 class="product-card__title">${escapeHtml(product.title)}</h3>
+        <p class="product-card__description">${escapeHtml(product.description)}</p>
         <div class="product-card__meta">
-            <span class="product-card__price">$ {{price}}</span>
+            <span class="product-card__price">$${escapeHtml(product.price)}</span>
             <span class="product-card__rating">
-                <span class="product-card__stars">{{rating}} ⭐</span>
-                <span class="product-card__stock">{{stock}} in stock</span>
+                <span class="product-card__stars">${escapeHtml(product.rating)} ⭐</span>
+                <span class="product-card__stock">${escapeHtml(product.stock)} in stock</span>
             </span>
         </div>
         <div class="product-card__brand">
             <span class="product-card__brand-label">Brand:</span>
-            <span class="product-card__brand-name">{{brand}}</span>
+            <span class="product-card__brand-name">${escapeHtml(product.brand)}</span>
         </div>
     </div>
 </div>
+<!-- escapeHtml() from helper.js -->
