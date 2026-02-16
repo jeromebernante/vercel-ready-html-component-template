@@ -16,7 +16,7 @@
         position: sticky;
         top: 0;
         z-index: 1000;
-        background-color: var(--primary);
+        background-color: var(--bg);
         transition: transform 0.25s ease;
         will-change: transform;
     }
@@ -64,7 +64,7 @@
     .header-hide-on-scroll-neurox nav a {
         display: block;
         text-decoration: none;
-        color: #fff;
+        color: var(--text);
         border-top: 1px solid #444;
         padding: 1rem;
     }
@@ -234,25 +234,17 @@
     const header = document.querySelector('.header-hide-on-scroll-neurox');
     let lastScrollY = window.scrollY;
     let ticking = false;
+    const HIDE_THRESHOLD = 50; // pixels scrolled down to hide
 
     function handleScroll() {
         const currentScrollY = window.scrollY;
 
-        // Ignore tiny scroll noise
-        if (Math.abs(currentScrollY - lastScrollY) < 5) {
-            ticking = false;
-            return;
-        }
-
-        if (
-            currentScrollY > lastScrollY &&
-            currentScrollY > header.offsetHeight
-        ) {
-            // scrolling down
-            header.classList.add('is-hidden');
-        } else {
-            // scrolling up
+        if (currentScrollY < lastScrollY) {
+            // scrolling up - always show header
             header.classList.remove('is-hidden');
+        } else if (currentScrollY - lastScrollY > HIDE_THRESHOLD) {
+            // scrolling down significantly
+            header.classList.add('is-hidden');
         }
 
         lastScrollY = currentScrollY;
@@ -277,7 +269,7 @@
         background-image: url(../images/header-bg-1.png);
         background-size: cover;
         background-position: center;
-        color: var(--primary-contrast);
+        color: var(--text-dark);
         padding: 2rem 0;
     }
     
