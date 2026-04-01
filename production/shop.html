@@ -233,18 +233,45 @@
     // Sticky hide-on-scroll logic
     const header = document.querySelector('.header-hide-on-scroll-neurox');
     let lastScrollY = window.scrollY;
+    let lastToggleY = window.scrollY;
     let ticking = false;
-    const HIDE_THRESHOLD = 50; // pixels scrolled down to hide
+    const HIDE_THRESHOLD = 60; // downward distance from last toggle before hiding
+    const SHOW_THRESHOLD = 1; // show quickly as soon as upward movement is detected
 
     function handleScroll() {
         const currentScrollY = window.scrollY;
 
-        if (currentScrollY < lastScrollY) {
-            // scrolling up - always show header
+        // Keep header visible near the top of the page.
+        if (currentScrollY <= 8) {
             header.classList.remove('is-hidden');
-        } else if (currentScrollY - lastScrollY > HIDE_THRESHOLD) {
-            // scrolling down significantly
-            header.classList.add('is-hidden');
+            lastToggleY = currentScrollY;
+            lastScrollY = currentScrollY;
+            ticking = false;
+            return;
+        }
+
+        // Keep header visible while mobile menu is open.
+        if (nav.classList.contains('active')) {
+            header.classList.remove('is-hidden');
+            lastToggleY = currentScrollY;
+            lastScrollY = currentScrollY;
+            ticking = false;
+            return;
+        }
+
+        const movingDown = currentScrollY > lastScrollY;
+        const movingUp = currentScrollY < lastScrollY;
+
+        if (movingDown) {
+            if ((currentScrollY - lastToggleY) >= HIDE_THRESHOLD && currentScrollY > header.offsetHeight) {
+                header.classList.add('is-hidden');
+                lastToggleY = currentScrollY;
+            }
+        } else if (movingUp) {
+            if ((lastToggleY - currentScrollY) >= SHOW_THRESHOLD) {
+                header.classList.remove('is-hidden');
+                lastToggleY = currentScrollY;
+            }
         }
 
         lastScrollY = currentScrollY;

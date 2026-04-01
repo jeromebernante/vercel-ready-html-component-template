@@ -9,7 +9,6 @@ const DIRS = {
   styles: path.join(DEV_SRC, "styles"),
   scripts: path.join(DEV_SRC, "scripts"),
   images: path.join(DEV_SRC, "images"),
-  widgets: path.join(DEV_SRC, "widgets"),
 };
 
 // Output: production/ for deploy, development/build/ for dev
@@ -92,6 +91,24 @@ function parseParams(paramStr) {
 }
 
 /**
+ * Parse shortcode attributes like: title="Hello" description='World'
+ */
+function parseShortcodeAttributes(attrStr) {
+  const params = {};
+  if (!attrStr) return params;
+
+  const attrRegex = /([\w-]+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"']+))/g;
+  let match;
+
+  while ((match = attrRegex.exec(attrStr)) !== null) {
+    const [, key, doubleQuoted, singleQuoted, unquoted] = match;
+    params[key] = doubleQuoted ?? singleQuoted ?? unquoted ?? "";
+  }
+
+  return params;
+}
+
+/**
  * Interpolate template variables in component
  */
 function interpolateComponent(template, params) {
@@ -109,10 +126,43 @@ function replaceComponentsRecursively(html, components, maxIterations = 10) {
   
   while (prevHtml !== html && iterations < maxIterations) {
     prevHtml = html;
+
+    // Block shortcode format:
+    // [component-name title="Hello"]...inner html/components...[/component-name]
+    html = html.replace(/\[([\w-]+)([^\]]*)\]([\s\S]*?)\[\/\1\]/g, (match, name, attrStr, inner) => {
+      const component = components[name];
+      if (!component) return match;
+      const params = {
+        ...parseShortcodeAttributes(attrStr),
+        content: inner.trim(),
+        innerContent: inner.trim(),
+        children: inner.trim(),
+      };
+      return interpolateComponent(component, params);
+    });
+
+    // Single shortcode format: [component-name title="Hello"]
+    html = html.replace(/\[(?!\/)([\w-]+)([^\]]*)\]/g, (match, name, attrStr) => {
+      const component = components[name];
+      if (!component) return match;
+      const params = {
+        ...parseShortcodeAttributes(attrStr),
+        content: "",
+        innerContent: "",
+        children: "",
+      };
+      return interpolateComponent(component, params);
+    });
+
     html = html.replace(/\{\{([\w-]+)(?::([^}]*))?\}\}/g, (match, name, paramStr) => {
       const component = components[name];
       if (!component) return match;
-      const params = parseParams(paramStr);
+      const params = {
+        ...parseParams(paramStr),
+        content: "",
+        innerContent: "",
+        children: "",
+      };
       return interpolateComponent(component, params);
     });
     iterations++;
@@ -138,7 +188,7 @@ function build() {
   copyDirectory(DIRS.scripts, path.join(outDir, "scripts"));
   copyDirectory(DIRS.images, path.join(outDir, "images"));
 
-  const components = loadComponents([DIRS.components, DIRS.widgets]);
+  const components = loadComponents([DIRS.components]);
 
   for (const file of fs.readdirSync(DIRS.pages)) {
     let html = fs.readFileSync(path.join(DIRS.pages, file), "utf-8");
