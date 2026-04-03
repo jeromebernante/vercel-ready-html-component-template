@@ -113,7 +113,7 @@ function parseShortcodeAttributes(attrStr) {
  */
 function interpolateComponent(template, params) {
   return template.replace(/\{\{([\w-]+)\}\}/g, (match, key) => {
-    return params[key] || match;
+    return Object.prototype.hasOwnProperty.call(params, key) ? params[key] : "";
   });
 }
 

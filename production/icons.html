@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<script>(function(){try{var k='theme-preference',t=localStorage.getItem(k);if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}else if(t==='light'){document.documentElement.setAttribute('data-theme','light');}else{document.documentElement.removeAttribute('data-theme');}}catch(e){} })()</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Icon Listing</title>
+    <link rel="stylesheet" href="styles/core.css">
+    <style>
+        .icon-listing-page {
+            padding-bottom: 4rem;
+        }
+
+        .icon-section {
+            padding-top: 0;
+        }
+
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .icon-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .icon-preview {
+            display: grid;
+            place-items: center;
+            min-height: 220px;
+            padding: 2rem;
+            background:
+                linear-gradient(135deg, rgba(229, 83, 45, 0.12), rgba(229, 83, 45, 0.03)),
+                repeating-linear-gradient(
+                    45deg,
+                    rgba(0, 0, 0, 0.03),
+                    rgba(0, 0, 0, 0.03) 14px,
+                    transparent 14px,
+                    transparent 28px
+                );
+            color: var(--text);
+        }
+
+        [data-theme="dark"] .icon-preview {
+            background:
+                linear-gradient(135deg, rgba(229, 83, 45, 0.22), rgba(229, 83, 45, 0.08)),
+                repeating-linear-gradient(
+                    45deg,
+                    rgba(255, 255, 255, 0.04),
+                    rgba(255, 255, 255, 0.04) 14px,
+                    transparent 14px,
+                    transparent 28px
+                );
+        }
+
+        .icon-preview svg {
+            width: 96px;
+            height: 96px;
+        }
+
+        .icon-content {
+            padding: 1.25rem;
+        }
+
+        .icon-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .icon-meta h2 {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .icon-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.3rem 0.65rem;
+            border-radius: 999px;
+            background: rgba(229, 83, 45, 0.12);
+            color: var(--primary);
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .icon-description {
+            margin: 0 0 1rem;
+            color: var(--muted);
+        }
+
+        .icon-details {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .icon-detail {
+            padding: 0.8rem;
+            border-radius: calc(var(--radius) - 2px);
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        [data-theme="dark"] .icon-detail {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .icon-detail strong {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-size: 0.82rem;
+        }
+
+        .icon-detail span {
+            font-size: 0.95rem;
+        }
+
+        .icon-code {
+            margin: 0;
+            padding: 1rem;
+            border-radius: calc(var(--radius) - 2px);
+            background: #111;
+            color: #f4f4f4;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .section-heading {
+            max-width: 700px;
+            margin-bottom: 2rem;
+        }
+
+        .section-heading h2 {
+            margin: 0 0 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .section-heading p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        @media (max-width: 640px) {
+            .icon-details {
+                grid-template-columns: 1fr;
+            }
+
+            .icon-meta {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <style>
+    /* ================= HEADER ================= */
+
+    .header-hide-on-scroll-neurox {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background-color: var(--bg);
+        transition: transform 0.25s ease;
+        will-change: transform;
+    }
+
+    /* hidden state */
+    .header-hide-on-scroll-neurox.is-hidden {
+        transform: translateY(-100%);
+    }
+
+    .header-hide-on-scroll-neurox .grid-container {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        position: relative;
+        align-items: center;
+    }
+
+    .header-hide-on-scroll-neurox .logo {
+        padding: 0.5rem 0;
+    }
+
+    .header-hide-on-scroll-neurox .logo img {
+        display: block;
+        height: 3rem;
+        width: auto;
+    }
+
+    /* Hamburger */
+    .header-hide-on-scroll-neurox .hamburger {
+        font-size: 1.5rem;
+        cursor: pointer;
+        display: block;
+    }
+
+    /* Nav */
+    .header-hide-on-scroll-neurox nav {
+        background-color: var(--primary);
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 100%;
+        grid-template-columns: 1fr;
+    }
+
+    .header-hide-on-scroll-neurox nav a {
+        display: block;
+        text-decoration: none;
+        color: var(--text);
+        border-top: 1px solid #444;
+        padding: 1rem;
+    }
+
+    /* Show menu when active */
+    .header-hide-on-scroll-neurox nav.active {
+        display: grid;
+    }
+
+
+    /* Larger screens */
+    @media (min-width: 768px) {
+        .header-hide-on-scroll-neurox {
+            grid-template-columns: auto 1fr;
+        }
+
+        .header-hide-on-scroll-neurox .hamburger {
+            display: none;
+        }
+
+        .header-hide-on-scroll-neurox nav {
+            background-color: unset;
+            display: grid;
+            grid-auto-flow: column;
+            /* horizontal nav links */
+            position: static;
+            width: auto;
+            align-items: center;
+        }
+
+        .header-hide-on-scroll-neurox nav a {
+            border: none;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        .header-hide-on-scroll-neurox nav a.active {
+            font-weight: bold;
+        }
+    }
+</style>
+
+
+<header class="header-hide-on-scroll-neurox">
+    <div class="box-container grid-container">
+        <div class="logo"><img src="../images/code.ico" alt="Logo"></div>
+        <div class="hamburger">&#9776;</div>
+        <nav class="nav">
+            <a class="" href="/">Home</a>
+            <a class="" href="about">About</a>
+            <a class="" href="components">Components</a>
+            <a class="active" href="icons">Icons</a>
+            <a class="" href="shop">Shop</a>
+            <style>
+  /* Theme Toggle Widget */
+  .theme-selector-neurox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .theme-selector-neurox .theme-dropdown {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: var(--card-bg);
+    color: var(--text);
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 200ms ease;
+  }
+
+  .theme-selector-neurox .theme-dropdown:hover {
+    border-color: var(--primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .theme-selector-neurox .theme-dropdown:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+  }
+
+  @media (max-width: 480px) {
+    .theme-selector-neurox .theme-dropdown {
+      padding: 0.4rem 0.6rem;
+      font-size: 0.85rem;
+    }
+  }
+</style>
+
+<div class="theme-selector-neurox">
+  <select id="theme-select" class="theme-dropdown" aria-label="Select theme">
+    <option value="light">☀️ Light</option>
+    <option value="dark">🌙 Dark</option>
+    <option value="system">💻 System</option>
+  </select>
+</div>
+
+<script>
+  // Theme toggle logic
+  function initThemeToggle() {
+    const root = document.documentElement;
+    const select = document.getElementById('theme-select');
+    const storageKey = 'theme-preference';
+
+    // Determine initial theme
+    const getTheme = () => {
+      const stored = localStorage.getItem(storageKey);
+      if (stored && ['light', 'dark', 'system'].includes(stored)) {
+        return stored;
+      }
+      return 'system';
+    };
+
+    const setTheme = (theme) => {
+      if (theme === 'system') {
+        root.removeAttribute('data-theme');
+      } else {
+        root.setAttribute('data-theme', theme);
+      }
+      localStorage.setItem(storageKey, theme);
+      if (select) {
+        select.value = theme;
+      }
+    };
+
+    // Initialize with stored or default theme
+    const currentTheme = getTheme();
+    setTheme(currentTheme);
+
+    // Listen for dropdown changes
+    select.addEventListener('change', (e) => {
+        const newTheme = e.target.value;
+        setTheme(newTheme);
+      });
+
+    // Listen for OS theme changes (only matters if system is selected)
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      const current = localStorage.getItem(storageKey);
+    });
+
+  }
+
+  // Run when DOM is ready
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initThemeToggle();
+  });
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    initThemeToggle();
+  }
+</script>
+        </nav>
+    </div>
+</header>
+
+<script>
+    // Mobile menu toggle
+    const hamburger = document.querySelector('.header-hide-on-scroll-neurox .hamburger');
+    const nav = document.querySelector('.header-hide-on-scroll-neurox .nav');
+
+    hamburger.addEventListener('click', () => {
+        nav.classList.toggle('active');
+    });
+
+    // Sticky hide-on-scroll logic
+    const header = document.querySelector('.header-hide-on-scroll-neurox');
+    let lastScrollY = window.scrollY;
+    let lastToggleY = window.scrollY;
+    let ticking = false;
+    const HIDE_THRESHOLD = 60; // downward distance from last toggle before hiding
+    const SHOW_THRESHOLD = 1; // show quickly as soon as upward movement is detected
+
+    function handleScroll() {
+        const currentScrollY = window.scrollY;
+
+        // Keep header visible near the top of the page.
+        if (currentScrollY <= 8) {
+            header.classList.remove('is-hidden');
+            lastToggleY = currentScrollY;
+            lastScrollY = currentScrollY;
+            ticking = false;
+            return;
+        }
+
+        // Keep header visible while mobile menu is open.
+        if (nav.classList.contains('active')) {
+            header.classList.remove('is-hidden');
+            lastToggleY = currentScrollY;
+            lastScrollY = currentScrollY;
+            ticking = false;
+            return;
+        }
+
+        const movingDown = currentScrollY > lastScrollY;
+        const movingUp = currentScrollY < lastScrollY;
+
+        if (movingDown) {
+            if ((currentScrollY - lastToggleY) >= HIDE_THRESHOLD && currentScrollY > header.offsetHeight) {
+                header.classList.add('is-hidden');
+                lastToggleY = currentScrollY;
+            }
+        } else if (movingUp) {
+            if ((lastToggleY - currentScrollY) >= SHOW_THRESHOLD) {
+                header.classList.remove('is-hidden');
+                lastToggleY = currentScrollY;
+            }
+        }
+
+        lastScrollY = currentScrollY;
+        ticking = false;
+    }
+
+    window.addEventListener(
+        'scroll',
+        () => {
+            if (!ticking) {
+                requestAnimationFrame(handleScroll);
+                ticking = true;
+            }
+        },
+        { passive: true }
+    );
+</script>
+
+    <main class="icon-listing-page">
+        <style>
+    .section-media-header {
+        background-color: var(--primary);
+        background-image: url(../images/header-bg-1.png);
+        background-size: cover;
+        background-position: center;
+        color: var(--text-dark);
+        padding: 2rem 0;
+    }
+    
+    .section-media-header h1 {
+        margin: 0;
+    }
+</style>
+
+<section class="section-media-header">
+    <div class="box-container">
+        <h1>Icon Listing</h1>
+        <p>A dedicated catalog page for reusable interface icons.</p>
+    </div>
+</section>
+
+        <section class="icon-section">
+            <div class="box-container">
+                <div class="section-heading">
+                    <h2>Navigation Icons</h2>
+                    <p>The first entry is the menu icon provided for compact navigation, drawers, and responsive headers.</p>
+                </div>
+
+                <div class="icon-grid">
+                    <article class="icon-card">
+                        <div class="icon-preview" aria-hidden="true">
+                            <svg style="border: 1px solid red;" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <line x1="0" y1="5" x2="24" y2="5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="0" y1="12" x2="24" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="0" y1="19" x2="24" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="icon-content">
+                            <div class="icon-meta">
+                                <h2>Menu Icon</h2>
+                                <span class="icon-tag">Navigation</span>
+                            </div>
+
+                            <p class="icon-description">A classic three-line menu icon sized for headers, mobile menus, and collapsed navigation controls.</p>
+
+                            <div class="icon-details">
+                                <div class="icon-detail">
+                                    <strong>Size</strong>
+                                    <span>24 x 24</span>
+                                </div>
+                                <div class="icon-detail">
+                                    <strong>Color</strong>
+                                    <span>Uses currentColor</span>
+                                </div>
+                            </div>
+
+                            <pre class="icon-code">&lt;svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"&gt;
+  &lt;line x1="0" y1="5" x2="24" y2="5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/&gt;
+  &lt;line x1="0" y1="12" x2="24" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/&gt;
+  &lt;line x1="0" y1="19" x2="24" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/&gt;
+&lt;/svg&gt;</pre>
+                        </div>
+                    </article>
+                    <article class="icon-card">
+                        <div class="icon-preview" aria-hidden="true">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <line x1="5" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="19" y1="5" x2="5" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="icon-content">
+                            <div class="icon-meta">
+                                <h2>Close Icon</h2>
+                                <span class="icon-tag">Navigation</span>
+                            </div>
+
+                            <p class="icon-description">A diagonal cross used to dismiss dialogs, modals, overlays, and other closable UI elements.</p>
+
+                            <div class="icon-details">
+                                <div class="icon-detail">
+                                    <strong>Size</strong>
+                                    <span>24 x 24</span>
+                                </div>
+                                <div class="icon-detail">
+                                    <strong>Color</strong>
+                                    <span>Uses currentColor</span>
+                                </div>
+                            </div>
+
+                            <pre class="icon-code">&lt;svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"&gt;
+  &lt;line x1="5" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/&gt;
+  &lt;line x1="19" y1="5" x2="5" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/&gt;
+&lt;/svg&gt;</pre>
+                        </div>
+                    </article>
+                    <article class="icon-card">
+                        <div class="icon-preview" aria-hidden="true">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+                                <line x1="16.65" y1="16.65" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="icon-content">
+                            <div class="icon-meta">
+                                <h2>Search Icon</h2>
+                                <span class="icon-tag">Navigation</span>
+                            </div>
+
+                            <p class="icon-description">A magnifying glass used for search inputs, search buttons, and query triggers across interfaces.</p>
+
+                            <div class="icon-details">
+                                <div class="icon-detail">
+                                    <strong>Size</strong>
+                                    <span>24 x 24</span>
+                                </div>
+                                <div class="icon-detail">
+                                    <strong>Color</strong>
+                                    <span>Uses currentColor</span>
+                                </div>
+                            </div>
+
+                            <pre class="icon-code">&lt;svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"&gt;
+  &lt;circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/&gt;
+  &lt;line x1="16.65" y1="16.65" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/&gt;
+&lt;/svg&gt;</pre>
+                        </div>
+                    </article>
+                    <article class="icon-card">
+                        <div class="icon-preview" aria-hidden="true">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
+                                <line x1="12" y1="1" x2="12" y2="4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="12" y1="20" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="1" y1="12" x2="4" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="20" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="4.22" y1="4.22" x2="6.34" y2="6.34" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="17.66" y1="17.66" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="4.22" y1="19.78" x2="6.34" y2="17.66" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="17.66" y1="6.34" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="icon-content">
+                            <div class="icon-meta">
+                                <h2>Sun Icon</h2>
+                                <span class="icon-tag">Theme</span>
+                            </div>
+
+                            <p class="icon-description">A sun with radiating rays used for light mode toggles, brightness controls, and weather indicators.</p>
+
+                            <div class="icon-details">
+                                <div class="icon-detail">
+                                    <strong>Size</strong>
+                                    <span>24 x 24</span>
+                                </div>
+                                <div class="icon-detail">
+                                    <strong>Color</strong>
+                                    <span>Uses currentColor</span>
+                                </div>
+                            </div>
+
+                            <pre class="icon-code">&lt;svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"&gt;
+  &lt;circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/&gt;
+  &lt;line x1="12" y1="1" x2="12" y2="4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/&gt;
+  &lt;line x1="12" y1="20" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/&gt;
+  &lt;line x1="1" y1="12" x2="4" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/&gt;
+  &lt;line x1="20" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/&gt;
+  &lt;line x1="4.22" y1="4.22" x2="6.34" y2="6.34" stroke="currentColor" stroke-width="2" stroke-linecap="round"/&gt;
+  &lt;line x1="17.66" y1="17.66" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" stroke-linecap="round"/&gt;
+  &lt;line x1="4.22" y1="19.78" x2="6.34" y2="17.66" stroke="currentColor" stroke-width="2" stroke-linecap="round"/&gt;
+  &lt;line x1="17.66" y1="6.34" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/&gt;
+&lt;/svg&gt;</pre>
+                        </div>
+                    </article>
+                    <article class="icon-card">
+                        <div class="icon-preview" aria-hidden="true">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21 12.5A8.5 8.5 0 1 1 11.5 3 A6.5 6.5 0 0 0 21 12.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="icon-content">
+                            <div class="icon-meta">
+                                <h2>Moon Icon</h2>
+                                <span class="icon-tag">Theme</span>
+                            </div>
+
+                            <p class="icon-description">A crescent moon used for dark mode toggles, night settings, and do-not-disturb indicators.</p>
+
+                            <div class="icon-details">
+                                <div class="icon-detail">
+                                    <strong>Size</strong>
+                                    <span>24 x 24</span>
+                                </div>
+                                <div class="icon-detail">
+                                    <strong>Color</strong>
+                                    <span>Uses currentColor</span>
+                                </div>
+                            </div>
+
+                            <pre class="icon-code">&lt;svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"&gt;
+  &lt;path d="M21 12.5A8.5 8.5 0 1 1 11.5 3 A6.5 6.5 0 0 0 21 12.5Z"
+        stroke="currentColor" stroke-width="2" stroke-linejoin="round"/&gt;
+&lt;/svg&gt;</pre>
+                        </div>
+                    </article>
+                    <article class="icon-card">
+                        <div class="icon-preview" aria-hidden="true">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="3" y="4" width="18" height="12" rx="2" stroke="currentColor" stroke-width="2"/>
+                                <line x1="8" y1="20" x2="16" y2="20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="12" y1="16" x2="12" y2="20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <circle cx="9" cy="10" r="2" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M15 8.5A2.5 2.5 0 1 0 17.5 11 A2 2 0 0 1 15 8.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="icon-content">
+                            <div class="icon-meta">
+                                <h2>System Theme Icon</h2>
+                                <span class="icon-tag">Theme</span>
+                            </div>
+
+                            <p class="icon-description">A monitor displaying sun and moon symbols, representing the system default or auto theme preference.</p>
+
+                            <div class="icon-details">
+                                <div class="icon-detail">
+                                    <strong>Size</strong>
+                                    <span>24 x 24</span>
+                                </div>
+                                <div class="icon-detail">
+                                    <strong>Color</strong>
+                                    <span>Uses currentColor</span>
+                                </div>
+                            </div>
+
+                            <pre class="icon-code">&lt;svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"&gt;
+  &lt;rect x="3" y="4" width="18" height="12" rx="2" stroke="currentColor" stroke-width="2"/&gt;
+  &lt;line x1="8" y1="20" x2="16" y2="20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/&gt;
+  &lt;line x1="12" y1="16" x2="12" y2="20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/&gt;
+  &lt;circle cx="9" cy="10" r="2" stroke="currentColor" stroke-width="1.5"/&gt;
+  &lt;path d="M15 8.5A2.5 2.5 0 1 0 17.5 11 A2 2 0 0 1 15 8.5Z"
+        stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/&gt;
+&lt;/svg&gt;</pre>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="icon-section">
+            <div class="box-container">
+                <div class="section-heading">
+                    <h2>User Icons</h2>
+                    <p>Avatars and person representations used across profiles, accounts, and identity-related UI.</p>
+                </div>
+
+                <div class="icon-grid">
+                    <article class="icon-card">
+                        <div class="icon-preview" aria-hidden="true">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/>
+                                <path d="M4 20c0-4 4-6 8-6s8 2 8 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="icon-content">
+                            <div class="icon-meta">
+                                <h2>User Icon</h2>
+                                <span class="icon-tag">User</span>
+                            </div>
+
+                            <p class="icon-description">A person silhouette used for profile links, account menus, login prompts, and user identity indicators.</p>
+
+                            <div class="icon-details">
+                                <div class="icon-detail">
+                                    <strong>Size</strong>
+                                    <span>24 x 24</span>
+                                </div>
+                                <div class="icon-detail">
+                                    <strong>Color</strong>
+                                    <span>Uses currentColor</span>
+                                </div>
+                            </div>
+
+                            <pre class="icon-code">&lt;svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"&gt;
+  &lt;circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/&gt;
+  &lt;path d="M4 20c0-4 4-6 8-6s8 2 8 6"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"/&gt;
+&lt;/svg&gt;</pre>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="icon-section">
+            <div class="box-container">
+                <div class="section-heading">
+                    <h2>Layout Icons</h2>
+                    <p>Grid and dashboard representations used for layout switchers, app dashboards, and view controls.</p>
+                </div>
+
+                <div class="icon-grid">
+                    <article class="icon-card">
+                        <div class="icon-preview" aria-hidden="true">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="3" y="2" width="7" height="11" rx="1" stroke="currentColor" stroke-width="2"/>
+<rect x="14" y="2" width="7" height="5" rx="1" stroke="currentColor" stroke-width="2"/>
+<rect x="3" y="17" width="7" height="5" rx="1" stroke="currentColor" stroke-width="2"/>
+<rect x="14" y="11" width="7" height="11" rx="1" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="icon-content">  
+                            <div class="icon-meta">
+                                <h2>Dashboard Icon</h2>
+                                <span class="icon-tag">Layout</span>
+                            </div>
+
+                            <p class="icon-description">An asymmetric grid of panels used for dashboards, overview pages, and variable-size layout controls.</p>
+
+                            <div class="icon-details">
+                                <div class="icon-detail">
+                                    <strong>Size</strong>
+                                    <span>24 x 24</span>
+                                </div>
+                                <div class="icon-detail">
+                                    <strong>Color</strong>
+                                    <span>Uses currentColor</span>
+                                </div>
+                            </div>
+
+                            <pre class="icon-code">&lt;svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"&gt;
+  &lt;rect x="3" y="3" width="7" height="7" rx="2" stroke="currentColor" stroke-width="2"/&gt;
+  &lt;rect x="14" y="3" width="7" height="5" rx="2" stroke="currentColor" stroke-width="2"/&gt;
+  &lt;rect x="14" y="10" width="7" height="11" rx="2" stroke="currentColor" stroke-width="2"/&gt;
+  &lt;rect x="3" y="14" width="7" height="7" rx="2" stroke="currentColor" stroke-width="2"/&gt;
+&lt;/svg&gt;</pre>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <style>
+    /* Footer Component */
+    footer {
+        background-color: var(--card-bg);
+        color: var(--muted);
+        text-align: center;
+        padding: 1rem;
+        width: 100%;
+        border-top: 1px solid rgba(0, 0, 0, 0.06);
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    footer p {
+        margin: 0.5rem 0;
+        font-size: 0.95rem;
+    }
+
+    @media (max-width: 480px) {
+        footer {
+            padding: 0.75rem;
+        }
+
+        footer p {
+            font-size: 0.85rem;
+        }
+    }
+</style>
+<footer>
+    <p>© 2026 My Website</p>
+</footer>
+</body>
+
+</html>

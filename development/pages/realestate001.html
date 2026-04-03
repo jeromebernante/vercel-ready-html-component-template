@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WP Residence — Find Your Dream Home</title>
+    <style>
+        /* ========== RESET & BASE ========== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        a { text-decoration: none; color: inherit; }
+
+        /* ========== TOP BAR ========== */
+        .top-bar {
+            background: #1c2b4a;
+            color: #aab4c8;
+            font-size: 0.82rem;
+            padding: 0.45rem 0;
+            position: relative;
+            z-index: 200;
+        }
+
+        .top-bar .inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .top-bar .social-links {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .top-bar .social-links a {
+            color: #8899bb;
+            font-size: 0.78rem;
+            font-weight: 600;
+            transition: color 0.2s;
+            line-height: 1;
+        }
+
+        .top-bar .social-links a:hover { color: #fff; }
+
+        .top-bar .contact-info {
+            display: flex;
+            align-items: center;
+            gap: 1.4rem;
+        }
+
+        .top-bar .contact-info a {
+            color: #8899bb;
+            font-size: 0.8rem;
+            transition: color 0.2s;
+        }
+
+        .top-bar .contact-info a:hover { color: #fff; }
+
+        /* ========== HEADER WRAP ========== */
+        .header-wrap {
+            position: relative;
+        }
+
+        /* ========== SITE HEADER ========== */
+        .site-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 150;
+            background: transparent;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .site-header.is-sticky {
+            position: fixed;
+            top: 0;
+            background: #fff;
+            box-shadow: 0 2px 14px rgba(0, 0, 0, 0.12);
+        }
+
+        .site-header .inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            height: 70px;
+        }
+
+        /* Logo */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            flex-shrink: 0;
+        }
+
+        .logo-diamond {
+            width: 34px;
+            height: 34px;
+            background: #2962ff;
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+        }
+
+        .logo-text {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.15;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .logo-text strong {
+            display: block;
+            font-size: 1rem;
+            letter-spacing: 1.5px;
+        }
+
+        .site-header.is-sticky .logo-text { color: #1c2b4a; }
+
+        /* Main Nav */
+        .main-nav {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            flex: 1;
+        }
+
+        .main-nav a {
+            padding: 0.4rem 0.85rem;
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.88);
+            transition: color 0.2s;
+        }
+
+        .main-nav a:hover { color: #fff; }
+
+        .site-header.is-sticky .main-nav a { color: #444; }
+        .site-header.is-sticky .main-nav a:hover { color: #2962ff; }
+
+        /* Header right-side actions */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-shrink: 0;
+        }
+
+        .header-actions .phone {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.88);
+            white-space: nowrap;
+        }
+
+        .site-header.is-sticky .header-actions .phone { color: #333; }
+
+        .header-actions .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+            padding: 0.2rem 0.3rem;
+            line-height: 1;
+        }
+
+        .site-header.is-sticky .header-actions .icon-btn { color: #555; }
+
+        .btn-add-listing {
+            background: #2962ff;
+            color: #fff;
+            padding: 0.55rem 1.25rem;
+            border-radius: 5px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-add-listing:hover { background: #1a4fd8; }
+
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.2rem;
+            margin-left: auto;
+        }
+
+        .site-header.is-sticky .hamburger { color: #333; }
+
+        /* Mobile nav drawer */
+        .mobile-nav {
+            display: none;
+            flex-direction: column;
+            background: #fff;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+            position: absolute;
+            top: 70px;
+            left: 0;
+            right: 0;
+            z-index: 160;
+            padding: 0.5rem 0;
+        }
+
+        .mobile-nav.open { display: flex; }
+
+        .mobile-nav a {
+            padding: 0.85rem 1.5rem;
+            font-size: 0.9rem;
+            color: #333;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .mobile-nav a:hover { background: #f5f8ff; color: #2962ff; }
+
+        /* ========== HERO SECTION ========== */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            background: url('https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1600&q=80')
+                center / cover no-repeat;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Dark overlay */
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(10, 20, 48, 0.58);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 9rem 1.5rem 5rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: clamp(1.9rem, 4vw, 3.2rem);
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            color: rgba(255, 255, 255, 0.82);
+            font-size: 1.05rem;
+            max-width: 600px;
+            margin: 0 auto 2.8rem;
+        }
+
+        /* ========== SEARCH WIDGET ========== */
+        .search-widget {
+            background: #fff;
+            border-radius: 6px;
+            max-width: 880px;
+            margin: 0 auto;
+            overflow: hidden;
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .search-tabs {
+            display: flex;
+        }
+
+        .search-tab {
+            padding: 0.9rem 2rem;
+            font-size: 0.93rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            background: #2962ff;
+            color: #fff;
+            transition: background 0.2s;
+        }
+
+        .search-tab.active {
+            background: #fff;
+            color: #222;
+            box-shadow: inset 0 -2px 0 #2962ff;
+        }
+
+        .search-tab:not(.active):hover { background: #1a4fd8; }
+
+        .search-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr auto;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.1rem 1.4rem;
+        }
+
+        .search-form select {
+            width: 100%;
+            padding: 0.65rem 2rem 0.65rem 0.8rem;
+            border: 1px solid #dde2ee;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #666;
+            background-color: #fff;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.7rem center;
+            cursor: pointer;
+        }
+
+        .search-form select:focus {
+            outline: none;
+            border-color: #2962ff;
+        }
+
+        .btn-search {
+            background: #2962ff;
+            color: #fff;
+            border: none;
+            padding: 0.68rem 1.6rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .btn-search:hover { background: #1a4fd8; }
+
+        /* ========== SECTION SHARED ========== */
+        .section {
+            padding: 5rem 0;
+        }
+
+        .section-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 2.8rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.95rem;
+            font-weight: 700;
+            color: #1c2b4a;
+            margin-bottom: 0.45rem;
+        }
+
+        .section-header p {
+            color: #888;
+            font-size: 1rem;
+        }
+
+        /* ========== FEATURED PROPERTIES ========== */
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
+            gap: 1.6rem;
+        }
+
+        .property-card {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.09);
+            background: #fff;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .property-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
+        }
+
+        .property-card .thumb {
+            position: relative;
+            height: 215px;
+            overflow: hidden;
+        }
+
+        .property-card .thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .property-card:hover .thumb img { transform: scale(1.06); }
+
+        .property-card .badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: #2962ff;
+            color: #fff;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 0.25rem 0.7rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .property-card .badge.rent { background: #27ae60; }
+
+        .property-card .price-tag {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.65));
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            padding: 1.8rem 1rem 0.8rem;
+        }
+
+        .property-card .body {
+            padding: 1rem 1.1rem 1.2rem;
+        }
+
+        .property-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1c2b4a;
+            margin-bottom: 0.3rem;
+        }
+
+        .property-card .address {
+            font-size: 0.82rem;
+            color: #999;
+            margin-bottom: 0.85rem;
+        }
+
+        .property-card .specs {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.82rem;
+            color: #666;
+            border-top: 1px solid #f0f0f0;
+            padding-top: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        /* ========== STATS SECTION ========== */
+        .stats-section {
+            background: #1c2b4a;
+            padding: 4.5rem 0;
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-item .number {
+            font-size: 2.6rem;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1;
+        }
+
+        .stat-item .label {
+            font-size: 0.88rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ========== FOOTER ========== */
+        .site-footer {
+            background: #111c30;
+            color: rgba(255, 255, 255, 0.55);
+            padding: 4rem 0 1.5rem;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 2.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .footer-col h4 {
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .footer-col p {
+            font-size: 0.85rem;
+            line-height: 1.75;
+        }
+
+        .footer-col ul { list-style: none; }
+
+        .footer-col ul li { margin-bottom: 0.55rem; }
+
+        .footer-col ul li a {
+            color: rgba(255, 255, 255, 0.55);
+            font-size: 0.85rem;
+            transition: color 0.2s;
+        }
+
+        .footer-col ul li a:hover { color: #fff; }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 1.3rem;
+            text-align: center;
+            font-size: 0.82rem;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 960px) {
+            .main-nav,
+            .header-actions .phone { display: none; }
+
+            .hamburger { display: block; }
+
+            .header-actions { gap: 0.6rem; }
+
+            .search-form {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 600px) {
+            .search-form { grid-template-columns: 1fr; }
+
+            .search-tab { padding: 0.75rem 1.2rem; font-size: 0.85rem; }
+
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+
+            .footer-grid { grid-template-columns: 1fr; }
+
+            .top-bar .social-links { display: none; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ============ TOP BAR ============ -->
+    <div class="top-bar">
+        <div class="inner">
+            <div class="social-links">
+                <a href="#" title="Facebook" aria-label="Facebook">f</a>
+                <a href="#" title="X / Twitter" aria-label="X">𝕏</a>
+                <a href="#" title="LinkedIn" aria-label="LinkedIn">in</a>
+                <a href="#" title="Pinterest" aria-label="Pinterest">P</a>
+                <a href="#" title="YouTube" aria-label="YouTube">&#9654;</a>
+                <a href="#" title="Vimeo" aria-label="Vimeo">V</a>
+                <a href="#" title="Instagram" aria-label="Instagram">&#9675;</a>
+                <a href="#" title="Foursquare" aria-label="Foursquare">4</a>
+            </div>
+            <div class="contact-info">
+                <a href="#">&#9829; Favorites</a>
+                <a href="mailto:contact@mail.com">&#9993; contact@mail.com</a>
+                <a href="tel:+14081671234">&#128242; +1 408 167 1234</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ HEADER WRAP (keeps absolute header scoped to hero) ============ -->
+    <div class="header-wrap" id="headerWrap">
+
+        <!-- SITE HEADER -->
+        <header class="site-header" id="siteHeader">
+            <div class="inner">
+                <a href="#" class="logo">
+                    <div class="logo-diamond"></div>
+                    <div class="logo-text">
+                        WP
+                        <strong>RESIDENCE</strong>
+                    </div>
+                </a>
+
+                <nav class="main-nav" aria-label="Primary">
+                    <a href="#">Home</a>
+                    <a href="#">Demos</a>
+                    <a href="#">Lists</a>
+                    <a href="#">Property</a>
+                    <a href="#">Pages</a>
+                    <a href="#">Elements</a>
+                    <a href="#">Search</a>
+                </nav>
+
+                <div class="header-actions">
+                    <span class="phone">&#128222; 800-555-6789</span>
+                    <button class="icon-btn" aria-label="My account">&#128100;</button>
+                    <a href="#" class="btn-add-listing">Add Listing</a>
+                </div>
+
+                <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">&#9776;</button>
+            </div>
+
+            <!-- Mobile nav -->
+            <nav class="mobile-nav" id="mobileNav" aria-label="Mobile">
+                <a href="#">Home</a>
+                <a href="#">Demos</a>
+                <a href="#">Lists</a>
+                <a href="#">Property</a>
+                <a href="#">Pages</a>
+                <a href="#">Elements</a>
+                <a href="#">Search</a>
+            </nav>
+        </header>
+
+        <!-- ============ HERO SECTION ============ -->
+        <section class="hero" aria-label="Hero">
+            <div class="hero-content">
+                <h1>Find Your Dream Home</h1>
+                <p>We are recognized for exceeding client expectations and delivering great results through
+                    dedication, ease of process, and extraordinary services to our worldwide clients.</p>
+
+                <!-- Search Widget -->
+                <div class="search-widget">
+                    <div class="search-tabs" role="tablist">
+                        <button class="search-tab active" role="tab" aria-selected="true" data-tab="sales">Sales</button>
+                        <button class="search-tab" role="tab" aria-selected="false" data-tab="rentals">Rentals</button>
+                        <button class="search-tab" role="tab" aria-selected="false" data-tab="invest">Invest</button>
+                    </div>
+                    <div class="search-form" role="search">
+                        <select aria-label="Property Category">
+                            <option value="">Property Category</option>
+                            <option>House</option>
+                            <option>Apartment</option>
+                            <option>Condo</option>
+                            <option>Townhouse</option>
+                            <option>Villa</option>
+                        </select>
+                        <select aria-label="Property City">
+                            <option value="">Property City</option>
+                            <option>New York</option>
+                            <option>Los Angeles</option>
+                            <option>Chicago</option>
+                            <option>Houston</option>
+                            <option>Miami</option>
+                        </select>
+                        <select aria-label="Beds and Baths">
+                            <option value="">Beds | Baths</option>
+                            <option>1 Bed / 1 Bath</option>
+                            <option>2 Beds / 1 Bath</option>
+                            <option>3 Beds / 2 Baths</option>
+                            <option>4+ Beds / 3+ Baths</option>
+                        </select>
+                        <select aria-label="Sale Price">
+                            <option value="">Sale Price</option>
+                            <option>Under $200,000</option>
+                            <option>$200,000 – $400,000</option>
+                            <option>$400,000 – $700,000</option>
+                            <option>$700,000 – $1M</option>
+                            <option>Above $1M</option>
+                        </select>
+                        <button class="btn-search" type="button">&#128269; Search</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div><!-- end .header-wrap -->
+
+    <!-- ============ FEATURED PROPERTIES ============ -->
+    <section class="section" aria-label="Featured Properties">
+        <div class="section-inner">
+            <div class="section-header">
+                <h2>Featured Properties</h2>
+                <p>Hand-picked listings selected by our expert agents</p>
+            </div>
+
+            <div class="properties-grid">
+
+                <article class="property-card">
+                    <div class="thumb">
+                        <img src="https://picsum.photos/seed/prop1/560/340" alt="Modern Family Home" loading="lazy">
+                        <span class="badge">For Sale</span>
+                        <div class="price-tag">$485,000</div>
+                    </div>
+                    <div class="body">
+                        <h3>Modern Family Home</h3>
+                        <p class="address">1234 Maple Street, Los Angeles, CA</p>
+                        <div class="specs">
+                            <span>&#127968; 4 Beds</span>
+                            <span>&#128703; 2 Baths</span>
+                            <span>&#128218; 2,200 sq ft</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="property-card">
+                    <div class="thumb">
+                        <img src="https://picsum.photos/seed/prop2/560/340" alt="Downtown Luxury Apartment" loading="lazy">
+                        <span class="badge rent">For Rent</span>
+                        <div class="price-tag">$3,200 / mo</div>
+                    </div>
+                    <div class="body">
+                        <h3>Downtown Luxury Apartment</h3>
+                        <p class="address">88 Ocean Drive, Miami, FL</p>
+                        <div class="specs">
+                            <span>&#127968; 2 Beds</span>
+                            <span>&#128703; 2 Baths</span>
+                            <span>&#128218; 1,100 sq ft</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="property-card">
+                    <div class="thumb">
+                        <img src="https://picsum.photos/seed/prop3/560/340" alt="Suburban Retreat" loading="lazy">
+                        <span class="badge">For Sale</span>
+                        <div class="price-tag">$750,000</div>
+                    </div>
+                    <div class="body">
+                        <h3>Suburban Retreat</h3>
+                        <p class="address">77 Lakeview Blvd, Chicago, IL</p>
+                        <div class="specs">
+                            <span>&#127968; 5 Beds</span>
+                            <span>&#128703; 3 Baths</span>
+                            <span>&#128218; 3,400 sq ft</span>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ STATS SECTION ============ -->
+    <div class="stats-section" aria-label="Statistics">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="number">12,400+</div>
+                <div class="label">Properties Listed</div>
+            </div>
+            <div class="stat-item">
+                <div class="number">8,900+</div>
+                <div class="label">Happy Clients</div>
+            </div>
+            <div class="stat-item">
+                <div class="number">340+</div>
+                <div class="label">Expert Agents</div>
+            </div>
+            <div class="stat-item">
+                <div class="number">15+</div>
+                <div class="label">Years of Experience</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>WP Residence</h4>
+                    <p>We help people find their perfect home with trust, transparency, and expert guidance every step of the way. Your dream home is just a search away.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Properties</a></li>
+                        <li><a href="#">List Your Property</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Property Types</h4>
+                    <ul>
+                        <li><a href="#">Houses</a></li>
+                        <li><a href="#">Apartments</a></li>
+                        <li><a href="#">Condos</a></li>
+                        <li><a href="#">Townhouses</a></li>
+                        <li><a href="#">Commercial</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><a href="tel:8005556789">&#128222; 800-555-6789</a></li>
+                        <li><a href="mailto:contact@mail.com">&#9993; contact@mail.com</a></li>
+                        <li><a href="#">&#128205; 123 Main St, New York, NY</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 WP Residence. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ========== STICKY HEADER: becomes fixed + white after 80px ==========
+        const siteHeader = document.getElementById('siteHeader');
+        const STICKY_AT = 80;
+
+        function updateHeaderSticky() {
+            if (window.scrollY >= STICKY_AT) {
+                siteHeader.classList.add('is-sticky');
+            } else {
+                siteHeader.classList.remove('is-sticky');
+            }
+        }
+
+        window.addEventListener('scroll', updateHeaderSticky, { passive: true });
+        updateHeaderSticky(); // apply correct state on page load
+
+        // ========== SEARCH TABS ==========
+        const tabs = document.querySelectorAll('.search-tab');
+        tabs.forEach(function (tab) {
+            tab.addEventListener('click', function () {
+                tabs.forEach(function (t) {
+                    t.classList.remove('active');
+                    t.setAttribute('aria-selected', 'false');
+                });
+                tab.classList.add('active');
+                tab.setAttribute('aria-selected', 'true');
+            });
+        });
+
+        // ========== HAMBURGER MENU ==========
+        const hamburger = document.getElementById('hamburger');
+        const mobileNav = document.getElementById('mobileNav');
+
+        hamburger.addEventListener('click', function () {
+            const isOpen = mobileNav.classList.toggle('open');
+            hamburger.setAttribute('aria-expanded', String(isOpen));
+        });
+
+        // Close mobile nav when a link is tapped
+        mobileNav.querySelectorAll('a').forEach(function (link) {
+            link.addEventListener('click', function () {
+                mobileNav.classList.remove('open');
+                hamburger.setAttribute('aria-expanded', 'false');
+            });
+        });
+    </script>
+
+</body>
+</html>
