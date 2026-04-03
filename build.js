@@ -5,6 +5,7 @@ import path from "path";
 const DEV_SRC = "./development";
 const DIRS = {
   components: path.join(DEV_SRC, "components"),
+  iconComponents: path.join(DEV_SRC, "components", "icons"),
   pages: path.join(DEV_SRC, "pages"),
   styles: path.join(DEV_SRC, "styles"),
   scripts: path.join(DEV_SRC, "scripts"),
@@ -188,7 +189,7 @@ function build() {
   copyDirectory(DIRS.scripts, path.join(outDir, "scripts"));
   copyDirectory(DIRS.images, path.join(outDir, "images"));
 
-  const components = loadComponents([DIRS.components]);
+  const components = loadComponents([DIRS.components, DIRS.iconComponents]);
 
   for (const file of fs.readdirSync(DIRS.pages)) {
     let html = fs.readFileSync(path.join(DIRS.pages, file), "utf-8");
